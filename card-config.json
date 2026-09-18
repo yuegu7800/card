@@ -7,9 +7,9 @@
   "collection": "ORIGINAL CYBERPUNK SERIES",
   "description": "An original cyberpunk heroine in violet neon.",
   "assets": {
-    "subject": "./assets/subject.png",
-    "background": "./assets/background.png",
-    "text": "./assets/text.png",
+    "subject": "./assets/subject.webp",
+    "background": "./assets/background.webp",
+    "text": "./assets/text.webp",
     "lineart": "./assets/lineart.png",
     "model": "./assets/card.glb"
   },

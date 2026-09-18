@@ -31363,7 +31363,7 @@ async function init() {
     }
   }
   renderer.setClearColor(config.appearance?.background || "#fafafa", 1);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, matchMedia("(max-width: 720px)").matches ? 1.5 : 2));
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = NoToneMapping;
   stage.append(renderer.domElement);
@@ -31930,7 +31930,7 @@ var fail = (message) => {
   loading2?.append(msg, retry);
   window.__holo = { ready: false, error: message };
 };
-var LOAD_TIMEOUT_MS = 12e3;
+var LOAD_TIMEOUT_MS = 3e4;
 var settled = false;
 Promise.race([
   init().then(() => {
