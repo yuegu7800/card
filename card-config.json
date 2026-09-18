@@ -1,0 +1,29 @@
+{
+  "title": "NEON WRAITH",
+  "subtitle": "SSR // SILVER FOIL",
+  "technique": "CHROMA SHIFT",
+  "tagline": "WHITE HAIR · VIOLET SIGNAL",
+  "edition": "No.001",
+  "collection": "ORIGINAL CYBERPUNK SERIES",
+  "description": "An original cyberpunk heroine in violet neon.",
+  "assets": {
+    "subject": "./assets/subject.png",
+    "background": "./assets/background.png",
+    "text": "./assets/text.png",
+    "lineart": "./assets/lineart.png",
+    "model": "./assets/card.glb"
+  },
+  "parameters": {
+    "subjectScale": 1.25,
+    "subjectDepth": 0.4,
+    "backgroundDepth": -0.25,
+    "foil": 0.65
+  },
+  "safeArea": {
+    "scale": 1.12,
+    "offset": [
+      -0.06,
+      -0.085
+    ]
+  }
+}
