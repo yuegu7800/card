@@ -1156,6 +1156,19 @@ dialog::backdrop {
   .stage {
     inset: 0 0 48px;
   }
+  .stage-note {
+    display: flex;
+    inset: auto 23px 18px;
+    justify-content: center;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .stage-note > span:first-child {
+    display: block;
+  }
+  .stage-note > span:last-child {
+    display: none;
+  }
   .artwork-bar {
     margin: 0 23px;
     padding: 25px 0 16px;

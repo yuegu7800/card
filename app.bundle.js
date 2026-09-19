@@ -31106,6 +31106,7 @@ var finish = "pearl";
 var zoom = 1;
 var targetX = -0.035;
 var targetY = -0.15;
+var autoBase = 0;
 var lastPointer = { x: 0, y: 0 };
 var noticeTimer;
 var settings = [
@@ -31579,6 +31580,7 @@ function fallback3D(error) {
   stage.append(wrap);
   $("loading").remove();
   let tx = -0.03, ty = -0.06, curX = 0, curY = 0, curFlip = 0, flipTarget = 0;
+  let pointerActive = false, pointerX = 0;
   let lastMove = 0, sway = !media.matches;
   let scale = 1, depthScale = 1, bgScale = 1;
   const applyLayers = () => {
@@ -31588,7 +31590,25 @@ function fallback3D(error) {
     }
   };
   applyLayers();
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    pointerActive = true;
+    pointerX = e.clientX;
+    setAutoUI(false);
+    stage.setPointerCapture(e.pointerId);
+    stage.classList.add("dragging");
+  });
   stage.addEventListener("pointermove", (e) => {
+    if (pointerActive) {
+      const halfTurnDistance = Math.min(Math.max(stage.clientWidth * 0.48, 140), 220);
+      flipTarget += (e.clientX - pointerX) * Math.PI / halfTurnDistance;
+      pointerX = e.clientX;
+      const nextFace = Math.cos(flipTarget) < 0;
+      if (nextFace !== flipped) {
+        flipped = nextFace;
+        faceLabels();
+      }
+    }
     const r = stage.getBoundingClientRect();
     tx = Math.max(-0.5, Math.min(0.5, ((e.clientY - r.top) / r.height - 0.5) * 0.9));
     ty = Math.max(-0.5, Math.min(0.5, ((e.clientX - r.left) / r.width - 0.5) * 1.1));
@@ -31600,6 +31620,13 @@ function fallback3D(error) {
   stage.addEventListener("pointerleave", () => {
     lastMove = 0;
   });
+  const releasePointer = () => {
+    pointerActive = false;
+    stage.classList.remove("dragging");
+  };
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach(
+    (type) => stage.addEventListener(type, releasePointer)
+  );
   const frame = (now) => {
     if (sway && now - lastMove > 1500) {
       const t = now / 1e3;
@@ -31616,7 +31643,7 @@ function fallback3D(error) {
   requestAnimationFrame(frame);
   const setFlip = (value) => {
     flipped = value;
-    flipTarget = flipped ? Math.PI : 0;
+    flipTarget = nearestFaceAngle(flipTarget, flipped);
     faceLabels();
   };
   const setAutoUI = (value) => {
@@ -31697,6 +31724,7 @@ function resize() {
 }
 function setAuto(value) {
   auto = value;
+  if (auto) autoBase = nearestFaceAngle(targetY, false);
   const button = $("auto");
   if (!button) return;
   button.setAttribute("aria-pressed", String(auto));
@@ -31727,10 +31755,21 @@ function faceLabels() {
   $("back").setAttribute("aria-pressed", String(flipped));
   $("view-label").textContent = flipped ? "02 / BACK" : "01 / FRONT";
 }
+function nearestFaceAngle(angle, back) {
+  const faceAngle = back ? Math.PI : 0;
+  return faceAngle + Math.round((angle - faceAngle) / (Math.PI * 2)) * Math.PI * 2;
+}
+function syncFacing() {
+  const nextFace = Math.cos(targetY) < 0;
+  if (nextFace !== flipped) {
+    flipped = nextFace;
+    faceLabels();
+  }
+}
 function flip(value = !flipped) {
   flipped = value;
   setAuto(false);
-  targetY = flipped ? Math.PI : 0;
+  targetY = nearestFaceAngle(targetY, flipped);
   targetX = 0;
   faceLabels();
 }
@@ -31757,6 +31796,8 @@ function updateInput(id, name) {
 function reset() {
   targetX = -0.035;
   targetY = -0.15;
+  root.rotation.set(targetX, targetY, 0);
+  root.updateMatrixWorld(true);
   zoom = 1;
   flipped = false;
   setAuto(false);
@@ -31805,18 +31846,15 @@ function setupControls() {
   });
   stage.addEventListener("pointermove", (e) => {
     if (!dragging) return;
-    const base = flipped ? Math.PI : 0;
-    targetY = MathUtils.clamp(
-      targetY + (e.clientX - lastPointer.x) * 6e-3,
-      base - 0.65,
-      base + 0.65
-    );
+    const halfTurnDistance = Math.min(Math.max(stage.clientWidth * 0.48, 140), 220);
+    targetY += (e.clientX - lastPointer.x) * Math.PI / halfTurnDistance;
     targetX = MathUtils.clamp(
       targetX + (e.clientY - lastPointer.y) * 4e-3,
       -0.36,
       0.36
     );
     lastPointer = { x: e.clientX, y: e.clientY };
+    syncFacing();
   });
   const release = () => {
     dragging = false;
@@ -31861,13 +31899,12 @@ function setupControls() {
       return;
     }
     setAuto(false);
-    const base = flipped ? Math.PI : 0;
-    if (e.key === "ArrowLeft") targetY -= 0.08;
-    if (e.key === "ArrowRight") targetY += 0.08;
+    if (e.key === "ArrowLeft") targetY -= 0.14;
+    if (e.key === "ArrowRight") targetY += 0.14;
     if (e.key === "ArrowUp") targetX -= 0.06;
     if (e.key === "ArrowDown") targetX += 0.06;
-    targetY = MathUtils.clamp(targetY, base - 0.65, base + 0.65);
     targetX = MathUtils.clamp(targetX, -0.36, 0.36);
+    syncFacing();
   });
   $("front").onclick = () => flip(false);
   $("back").onclick = () => flip(true);
@@ -31937,8 +31974,9 @@ function animate(now) {
   if (document.hidden) return;
   if (!media.matches || auto) elapsed += dt;
   if (auto) {
-    targetY = Math.sin(elapsed * 0.42) * 0.23 - 0.055;
+    targetY = autoBase + Math.sin(elapsed * 0.42) * 0.23 - 0.055;
     targetX = Math.sin(elapsed * 0.53) * 0.055 - 0.018;
+    syncFacing();
   }
   const ease = media.matches ? 1 : 1 - Math.exp(-dt * 8);
   root.rotation.x += (targetX - root.rotation.x) * ease;

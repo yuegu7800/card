@@ -10,7 +10,7 @@
     <meta property="og:image" content="https://yuegu7800.github.io/card/assets/preview.webp" />
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <title>NEON WRAITH · 全息收藏卡</title>
-    <link rel="stylesheet" href="./style.css?v=edition-2" />
+    <link rel="stylesheet" href="./style.css?v=edition-3" />
   </head>
   <body>
     <header class="masthead">
@@ -47,7 +47,7 @@
         <div class="gallery-copy" aria-hidden="true">
           <span class="gallery-index">COLLECTIBLE / 001</span>
           <strong>光随视角<br />流动。</strong>
-          <p>拖动卡片，感受银箔与人物景深。</p>
+          <p>左右拖动，同一张卡从正面转到背面。</p>
         </div>
         <div class="gallery-serial" aria-hidden="true">SSR <span>—</span> SILVER FOIL</div>
         <div
@@ -55,11 +55,11 @@
           id="stage"
           tabindex="0"
           role="group"
-          aria-label="可旋转的全息卡片"
+          aria-label="可连续旋转的全息卡片，左右拖动可翻看正反面"
         >
           <img
             class="static-poster"
-            src="./assets/preview.webp?v=edition-2"
+            src="./assets/preview.webp?v=edition-3"
             alt="NEON WRAITH 卡面预览"
           />
           <div id="loading" class="loading" role="status">
@@ -67,7 +67,7 @@
           </div>
         </div>
         <div class="stage-note" aria-hidden="true">
-          <span>DRAG TO DISCOVER</span><span id="view-label">01 / FRONT</span>
+          <span>左右拖动 · 翻看正反面</span><span id="view-label">01 / FRONT</span>
         </div>
         <div class="parameter-panel" id="parameter-panel" hidden>
           <div class="panel-heading">
@@ -99,7 +99,7 @@
           </div>
           <p id="description">紫色霓虹中的原创赛博朋克角色。</p>
         </div>
-        <div class="face-picker" role="group" aria-label="卡片朝向">
+        <div class="face-picker" role="group" aria-label="正反面快捷跳转，也可直接拖动卡片">
           <button id="front" aria-pressed="true" disabled>正面</button
           ><button id="back" aria-pressed="false" disabled>背面</button>
         </div>
@@ -201,6 +201,6 @@
       </dl>
     </dialog>
     <div id="notice" role="status" class="notice" hidden></div>
-    <script type="module" src="./app.bundle.js?v=edition-2"></script>
+    <script type="module" src="./app.bundle.js?v=edition-3"></script>
   </body>
 </html>
