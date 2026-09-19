@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "id": "neon-wraith",
+      "kind": "sample",
+      "title": "NEON WRAITH",
+      "subtitle": "原创赛博朋克角色",
+      "edition": "No.001",
+      "collection": "ORIGINAL CYBERPUNK SERIES",
+      "rarity": "SSR",
+      "description": "白发、紫色霓虹与银箔流光。这是图鉴的第一张示例卡。",
+      "image": "./assets/preview.webp",
+      "href": "./"
+    }
+  ]
+}

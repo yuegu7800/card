@@ -6,6 +6,17 @@
   "edition": "No.001",
   "collection": "ORIGINAL CYBERPUNK SERIES",
   "description": "An original cyberpunk heroine in violet neon.",
+  "back": {
+    "monogram": "NW",
+    "eyebrow": "CHARACTER FILE / 001",
+    "classification": "SSR · SILVER FOIL",
+    "summary": "紫色霓虹中的原创赛博朋克角色。",
+    "fields": [
+      { "label": "系列", "value": "ORIGINAL CYBERPUNK SERIES" },
+      { "label": "视觉线索", "value": "WHITE HAIR · VIOLET SIGNAL" },
+      { "label": "卡面工艺", "value": "CHROMA SHIFT" }
+    ]
+  },
   "appearance": { "finish": "silver" },
   "assets": {
     "subject": "./assets/subject.webp",

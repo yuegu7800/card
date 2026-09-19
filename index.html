@@ -10,7 +10,7 @@
     <meta property="og:image" content="https://yuegu7800.github.io/card/assets/preview.webp" />
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <title>NEON WRAITH · 全息收藏卡</title>
-    <link rel="stylesheet" href="./style.css?v=edition-3" />
+    <link rel="stylesheet" href="./style.css?v=edition-4" />
   </head>
   <body>
     <header class="masthead">
@@ -22,6 +22,7 @@
         >INTERACTIVE COLLECTIBLE <span>/</span> <span id="edition">No.001</span></span
       >
       <div class="header-actions">
+        <a class="archive-link" href="#archive">角色图鉴 <span id="catalogue-count">01</span></a>
         <button
           class="icon-button"
           id="info"
@@ -45,11 +46,11 @@
     <main>
       <section class="gallery" aria-label="卡片展台">
         <div class="gallery-copy" aria-hidden="true">
-          <span class="gallery-index">COLLECTIBLE / 001</span>
+          <span class="gallery-index" id="gallery-index">COLLECTIBLE / 001</span>
           <strong>光随视角<br />流动。</strong>
           <p>左右拖动，同一张卡从正面转到背面。</p>
         </div>
-        <div class="gallery-serial" aria-hidden="true">SSR <span>—</span> SILVER FOIL</div>
+        <div class="gallery-serial" id="gallery-serial" aria-hidden="true">SSR <span>—</span> SILVER FOIL</div>
         <div
           class="stage"
           id="stage"
@@ -94,8 +95,8 @@
       <section class="artwork-bar" aria-label="作品与材质">
         <div class="artwork-title">
           <div class="title-line">
-            <h1 id="card-title">BOND</h1>
-            <span id="subtitle">共生</span>
+            <h1 id="card-title">NEON WRAITH</h1>
+            <span id="subtitle">SSR // SILVER FOIL</span>
           </div>
           <p id="description">紫色霓虹中的原创赛博朋克角色。</p>
         </div>
@@ -104,6 +105,7 @@
           ><button id="back" aria-pressed="false" disabled>背面</button>
         </div>
         <div class="finish-cluster">
+          <button id="spoiler-toggle" class="spoiler-toggle" type="button" aria-pressed="false" hidden>显示剧透</button>
           <button
             id="depth-toggle"
             class="depth-toggle"
@@ -169,9 +171,37 @@
           </div>
         </div>
       </section>
+      <section class="archive" id="archive" aria-labelledby="archive-title">
+        <div class="archive-heading">
+          <div>
+            <span class="archive-eyebrow">THE CHARACTER INDEX / 01</span>
+            <h2 id="archive-title">角色图鉴</h2>
+          </div>
+          <p>每个角色独立成卡。沿着故事，慢慢收集属于这个世界的人物。</p>
+        </div>
+        <div class="archive-grid">
+          <div id="catalogue-list" class="archive-list" aria-live="polite">
+            <a class="archive-card" href="./" aria-current="page" aria-label="查看 NEON WRAITH 角色卡">
+              <img src="./assets/preview.webp" alt="NEON WRAITH 卡面预览" loading="lazy" />
+              <span class="archive-card-body">
+                <span class="archive-card-kicker">No.001 / 示例卡</span>
+                <strong>NEON WRAITH</strong>
+                <span class="archive-card-subtitle">原创赛博朋克角色</span>
+                <span class="archive-card-description">白发、紫色霓虹与银箔流光。这是图鉴的第一张示例卡。</span>
+                <span class="archive-card-action">查看卡片 ↗</span>
+              </span>
+            </a>
+          </div>
+          <aside class="archive-next" id="archive-next" aria-label="下一张角色卡">
+            <span>下一个位置 / <span id="archive-next-index">002</span></span>
+            <strong>等待故事中的<br />下一位人物。</strong>
+            <p>给出姓名、外貌和身份，或提供参考图，就可以通过 RuiC-card-skill 制作并加入这里。</p>
+          </aside>
+        </div>
+      </section>
     </main>
     <footer class="footer">
-      <span>转动视角，光泽会变。</span><span>NEON ARCHIVE / No.001</span>
+      <span>转动视角，光泽会变。</span><span id="footer-edition">NEON ARCHIVE / No.001</span>
     </footer>
     <dialog id="about" aria-labelledby="about-title">
       <button
@@ -182,13 +212,13 @@
       >
         <i data-lucide="x"></i>
       </button>
-      <p class="dialog-mark">NW / 001</p>
-      <h2 id="about-title">共生 / BOND</h2>
+      <p class="dialog-mark" id="dialog-mark">NW / 001</p>
+      <h2 id="about-title">NEON WRAITH</h2>
       <p id="about-description"></p>
       <dl>
         <div>
-          <dt>来源</dt>
-          <dd>原创赛博朋克角色</dd>
+          <dt>系列</dt>
+          <dd id="about-series">ORIGINAL CYBERPUNK SERIES</dd>
         </div>
         <div>
           <dt>呈现</dt>
@@ -201,6 +231,7 @@
       </dl>
     </dialog>
     <div id="notice" role="status" class="notice" hidden></div>
-    <script type="module" src="./app.bundle.js?v=edition-3"></script>
+    <script type="module" src="./app.bundle.js?v=edition-4"></script>
+    <script type="module" src="./catalogue.js?v=edition-4"></script>
   </body>
 </html>

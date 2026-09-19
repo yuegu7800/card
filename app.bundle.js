@@ -31107,6 +31107,8 @@ var zoom = 1;
 var targetX = -0.035;
 var targetY = -0.15;
 var autoBase = 0;
+var showSpoilers = false;
+var fallbackBackUpdate = null;
 var lastPointer = { x: 0, y: 0 };
 var noticeTimer;
 var settings = [
@@ -31253,6 +31255,17 @@ function canvasTexture(canvas) {
   texture.colorSpace = NoColorSpace;
   return texture;
 }
+function backFields() {
+  const fields = config.back?.fields;
+  if (Array.isArray(fields) && fields.length) {
+    return fields.filter((field) => field && field.label && field.value).slice(0, 3);
+  }
+  return [
+    { label: "系列", value: config.collection || "—" },
+    { label: "视觉线索", value: config.tagline || "—" },
+    { label: "卡面工艺", value: config.technique || "—" }
+  ];
+}
 function backTexture() {
   const c = document.createElement("canvas");
   c.width = 1024;
@@ -31279,37 +31292,84 @@ function backTexture() {
   ctx.lineWidth = 2;
   ctx.strokeRect(62, 62, 900, 1412);
   ctx.lineWidth = 1.5;
-  for (const radius of [294, 342]) {
-    ctx.beginPath(); ctx.arc(512, 755, radius, 0, Math.PI * 2); ctx.stroke();
-  }
-  ctx.beginPath();
-  ctx.moveTo(512, 335); ctx.lineTo(512, 510);
-  ctx.moveTo(512, 1000); ctx.lineTo(512, 1175);
-  ctx.moveTo(90, 755); ctx.lineTo(218, 755);
-  ctx.moveTo(806, 755); ctx.lineTo(934, 755);
-  ctx.stroke();
+  ctx.beginPath(); ctx.arc(512, 455, 210, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(512, 455, 238, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(512, 185); ctx.lineTo(512, 215); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(512, 695); ctx.lineTo(512, 720); ctx.stroke();
   ctx.textAlign = "center";
   ctx.fillStyle = "#dfc6ee";
   ctx.font = "22px Arial";
-  ctx.letterSpacing = "8px";
-  ctx.fillText("NEON ARCHIVE", 512, 195);
-  ctx.font = "600 328px Atelier, Georgia, serif";
-  ctx.letterSpacing = "-24px";
-  ctx.shadowColor = "#e495f7";
-  ctx.shadowBlur = 45;
-  ctx.fillText("NW", 493, 870);
-  ctx.shadowBlur = 0;
   ctx.letterSpacing = "6px";
-  ctx.font = "26px Arial";
-  ctx.fillText("SSR  /  SILVER FOIL", 512, 1050);
-  ctx.font = "37px Atelier, Georgia, serif";
+  ctx.fillText(config.back?.eyebrow || "CHARACTER FILE", 512, 155, 800);
+  ctx.font = "600 210px Atelier, Georgia, serif";
+  ctx.letterSpacing = "-12px";
+  ctx.shadowColor = "#e495f7";
+  ctx.shadowBlur = 36;
+  ctx.fillText(config.back?.monogram || (config.title || "C").slice(0, 2), 500, 525, 540);
+  ctx.shadowBlur = 0;
+  ctx.letterSpacing = "3px";
+  ctx.font = "52px Atelier, Georgia, serif";
+  ctx.fillText(config.title || "UNTITLED", 512, 777, 790);
+  ctx.font = "23px Arial";
   ctx.letterSpacing = "5px";
-  ctx.fillText(config.title || "NEON WRAITH", 512, 1298);
-  ctx.font = "21px Arial";
-  ctx.letterSpacing = "7px";
   ctx.fillStyle = "#b7a6cf";
-  ctx.fillText(config.edition || "No.001", 512, 1363);
+  ctx.fillText(config.back?.classification || config.subtitle || "CHARACTER CARD", 512, 830, 760);
+  ctx.strokeStyle = "rgba(222, 190, 240, 0.55)";
+  ctx.beginPath(); ctx.moveTo(140, 870); ctx.lineTo(884, 870); ctx.stroke();
+  ctx.font = "28px Arial";
+  ctx.letterSpacing = "0px";
+  ctx.fillStyle = "#ded5e8";
+  const summary = config.back?.summarySpoiler && !showSpoilers
+    ? "剧情简介已隐藏。可在卡片下方显示剧透。"
+    : config.back?.summary || config.description || "";
+  let line = "";
+  let lineNo = 0;
+  for (const character of Array.from(summary)) {
+    if (ctx.measureText(line + character).width > 744 && lineNo < 2) {
+      ctx.fillText(line, 512, 935 + lineNo * 42);
+      line = character;
+      lineNo++;
+    } else {
+      line += character;
+    }
+  }
+  if (lineNo < 2) ctx.fillText(line, 512, 935 + lineNo * 42, 744);
+  ctx.strokeStyle = "rgba(222, 190, 240, 0.35)";
+  ctx.beginPath(); ctx.moveTo(140, 1043); ctx.lineTo(884, 1043); ctx.stroke();
+  backFields().forEach((field, index) => {
+    const y = 1118 + index * 98;
+    ctx.textAlign = "left";
+    ctx.font = "23px Arial";
+    ctx.fillStyle = "#ae9bbf";
+    ctx.fillText(String(field.label), 145, y, 175);
+    ctx.textAlign = "right";
+    ctx.font = "29px Arial";
+    ctx.fillStyle = "#f2e7fa";
+    ctx.fillText(field.spoiler && !showSpoilers ? "剧情线索已隐藏" : String(field.value), 877, y, 545);
+    ctx.strokeStyle = "rgba(222, 190, 240, 0.18)";
+    ctx.beginPath(); ctx.moveTo(140, y + 28); ctx.lineTo(884, y + 28); ctx.stroke();
+  });
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#c0a9d3";
+  ctx.font = "20px Arial";
+  ctx.letterSpacing = "8px";
+  ctx.fillText(config.edition || "NO EDITION", 512, 1450, 740);
   return canvasTexture(c);
+}
+function setSpoilers(value) {
+  showSpoilers = value;
+  const button = $("spoiler-toggle");
+  if (button) {
+    button.setAttribute("aria-pressed", String(value));
+    button.textContent = value ? "隐藏剧透" : "显示剧透";
+  }
+  if (fallbackBackUpdate) {
+    fallbackBackUpdate();
+  } else if (uniforms?.tBack?.value) {
+    const previous = uniforms.tBack.value;
+    uniforms.tBack.value = backTexture();
+    previous.dispose();
+  }
 }
 function addShadow() {
   const c = document.createElement("canvas");
@@ -31364,6 +31424,13 @@ async function init() {
   if (!response.ok) throw Error("\u4F5C\u54C1\u914D\u7F6E\u672A\u627E\u5230");
   config = await response.json();
   document.title = config.title + " \xB7 NEON ARCHIVE";
+  const spoilerToggle = $("spoiler-toggle");
+  if (spoilerToggle) {
+    spoilerToggle.hidden = !(
+      config.back?.summarySpoiler || backFields().some((field) => field.spoiler)
+    );
+    spoilerToggle.onclick = () => setSpoilers(!showSpoilers);
+  }
   for (const [id, key] of [
     ["card-title", "title"],
     ["subtitle", "subtitle"],
@@ -31373,6 +31440,11 @@ async function init() {
     ["about-edition", "edition"]
   ])
     $(id).textContent = config[key] || "";
+  $("gallery-index").textContent = `COLLECTIBLE / ${config.edition || "—"}`;
+  $("gallery-serial").textContent = config.back?.classification || config.subtitle || "CHARACTER CARD";
+  $("dialog-mark").textContent = `${config.back?.monogram || (config.title || "C").slice(0, 2)} / ${config.edition || "—"}`;
+  $("footer-edition").textContent = `NEON ARCHIVE / ${config.edition || "—"}`;
+  $("about-series").textContent = config.collection || "原创角色";
   $("about-title").textContent = [config.subtitle, config.title].filter(Boolean).join(" / ");
   await document.fonts.load("500 42px Atelier");
   try {
@@ -31570,17 +31642,21 @@ function fallback3D(error) {
   front.append(foil);
   const back = document.createElement("div");
   back.className = "face3d back3d";
-  const backMark = document.createElement("span");
-  backMark.className = "back-mark";
-  backMark.textContent = "NW";
-  back.append(backMark);
+  back.setAttribute("role", "img");
+  back.setAttribute("aria-label", `${config.title || "角色"} 的卡背档案`);
+  fallbackBackUpdate = () => {
+    const texture = backTexture();
+    back.style.backgroundImage = `url(${texture.image.toDataURL("image/png")})`;
+    texture.dispose();
+  };
+  fallbackBackUpdate();
   card.append(front, back);
   flipper.append(card);
   wrap.append(flipper);
   stage.append(wrap);
   $("loading").remove();
   let tx = -0.03, ty = -0.06, curX = 0, curY = 0, curFlip = 0, flipTarget = 0;
-  let pointerActive = false, pointerX = 0;
+  let pointerActive = false, pointerX = 0, pointerVelocity = 0, pointerTime = 0;
   let lastMove = 0, sway = !media.matches;
   let scale = 1, depthScale = 1, bgScale = 1;
   const applyLayers = () => {
@@ -31594,6 +31670,8 @@ function fallback3D(error) {
     if (e.button !== 0) return;
     pointerActive = true;
     pointerX = e.clientX;
+    pointerVelocity = 0;
+    pointerTime = performance.now();
     setAutoUI(false);
     stage.setPointerCapture(e.pointerId);
     stage.classList.add("dragging");
@@ -31601,7 +31679,11 @@ function fallback3D(error) {
   stage.addEventListener("pointermove", (e) => {
     if (pointerActive) {
       const halfTurnDistance = Math.min(Math.max(stage.clientWidth * 0.48, 140), 220);
-      flipTarget += (e.clientX - pointerX) * Math.PI / halfTurnDistance;
+      const now = performance.now();
+      const delta = (e.clientX - pointerX) * Math.PI / halfTurnDistance;
+      pointerVelocity = delta / Math.max(now - pointerTime, 8);
+      pointerTime = now;
+      flipTarget += delta;
       pointerX = e.clientX;
       const nextFace = Math.cos(flipTarget) < 0;
       if (nextFace !== flipped) {
@@ -31621,6 +31703,15 @@ function fallback3D(error) {
     lastMove = 0;
   });
   const releasePointer = () => {
+    if (pointerActive) {
+      if (!media.matches && performance.now() - pointerTime < 90) {
+        flipTarget += Math.max(-0.16, Math.min(0.16, pointerVelocity * 50));
+      }
+      const restingFace = nearestFaceAngle(flipTarget, Math.cos(flipTarget) < 0);
+      if (Math.abs(restingFace - flipTarget) < 0.4) flipTarget = restingFace;
+      flipped = Math.cos(flipTarget) < 0;
+      faceLabels();
+    }
     pointerActive = false;
     stage.classList.remove("dragging");
   };
@@ -31824,6 +31915,8 @@ function toggleSettings(show = $("parameter-panel").hidden) {
   if (button) button.setAttribute("aria-expanded", String(show));
 }
 function setupControls() {
+  let pointerVelocity = 0;
+  let pointerTime = 0;
   if (config.sourceMode === "relief") {
     $("depth").min = "0.0";
     $("depth").max = "0.9";
@@ -31838,6 +31931,8 @@ function setupControls() {
   stage.addEventListener("pointerdown", (e) => {
     if (e.button !== 0) return;
     dragging = true;
+    pointerVelocity = 0;
+    pointerTime = performance.now();
     setAuto(false);
     lastPointer = { x: e.clientX, y: e.clientY };
     stage.setPointerCapture(e.pointerId);
@@ -31847,7 +31942,11 @@ function setupControls() {
   stage.addEventListener("pointermove", (e) => {
     if (!dragging) return;
     const halfTurnDistance = Math.min(Math.max(stage.clientWidth * 0.48, 140), 220);
-    targetY += (e.clientX - lastPointer.x) * Math.PI / halfTurnDistance;
+    const now = performance.now();
+    const delta = (e.clientX - lastPointer.x) * Math.PI / halfTurnDistance;
+    pointerVelocity = delta / Math.max(now - pointerTime, 8);
+    pointerTime = now;
+    targetY += delta;
     targetX = MathUtils.clamp(
       targetX + (e.clientY - lastPointer.y) * 4e-3,
       -0.36,
@@ -31857,6 +31956,14 @@ function setupControls() {
     syncFacing();
   });
   const release = () => {
+    if (dragging) {
+      if (!media.matches && performance.now() - pointerTime < 90) {
+        targetY += Math.max(-0.16, Math.min(0.16, pointerVelocity * 50));
+      }
+      const restingFace = nearestFaceAngle(targetY, Math.cos(targetY) < 0);
+      if (Math.abs(restingFace - targetY) < 0.4) targetY = restingFace;
+      syncFacing();
+    }
     dragging = false;
     stage.classList.remove("dragging");
   };

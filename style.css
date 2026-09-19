@@ -1228,3 +1228,199 @@ dialog::backdrop {
     font-size: 29px;
   }
 }
+
+/* The index grows from one sample card into a collection without changing the viewer. */
+html {
+  scroll-behavior: smooth;
+}
+.archive-link {
+  align-self: center;
+  padding: 10px 14px;
+  color: #cfc5dc;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.archive-link:hover {
+  color: var(--ink);
+  border-color: #c494e7;
+}
+.archive-link span {
+  margin-left: 7px;
+  color: #d7b7ef;
+  font-variant-numeric: tabular-nums;
+}
+.archive {
+  max-width: 1492px;
+  margin: 92px auto 110px;
+  padding: 34px 54px 0;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 30px;
+}
+.archive-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 50px;
+  margin-bottom: 36px;
+}
+.archive-eyebrow {
+  color: #c7a8da;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+.archive-heading h2 {
+  margin: 12px 0 0;
+  font: 400 clamp(42px, 5vw, 68px)/1.05 "Songti SC", "STSong", serif;
+  letter-spacing: 0.04em;
+}
+.archive-heading p {
+  max-width: 280px;
+  margin: 0 0 7px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr));
+  gap: 24px;
+}
+.archive-list {
+  display: contents;
+}
+.archive-card {
+  min-height: 254px;
+  display: grid;
+  grid-template-columns: minmax(130px, 36%) 1fr;
+  overflow: hidden;
+  background: #15192a;
+  border: 1px solid #41405a;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.archive-card:hover {
+  transform: translateY(-5px);
+  border-color: #b996d2;
+  box-shadow: 0 18px 44px #0006;
+}
+.archive-card:active {
+  transform: translateY(-1px) scale(0.995);
+}
+.archive-card[aria-current="page"] {
+  border-color: #876b9f;
+}
+.archive-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: #251c36;
+}
+.archive-card-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 27px 24px 23px;
+}
+.archive-card-kicker {
+  color: #c9a8dc;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+.archive-card strong {
+  margin-top: 28px;
+  font: 400 clamp(24px, 2.5vw, 35px)/1.1 Atelier, Georgia, serif;
+  overflow-wrap: anywhere;
+}
+.archive-card-subtitle {
+  margin-top: 7px;
+  color: #d2c0dc;
+  font-size: 11px;
+}
+.archive-card-description {
+  max-width: 30ch;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.archive-card-action {
+  margin-top: auto;
+  padding-top: 20px;
+  color: #e5c8fa;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.archive-next {
+  min-height: 254px;
+  padding: 25px 35px;
+  border-top: 1px solid #796086;
+  background: radial-gradient(circle at 88% 20%, #57355b42, transparent 55%), #111525;
+}
+.archive-next > span {
+  color: #aa94bb;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+.archive-next strong {
+  display: block;
+  margin-top: 29px;
+  font: 400 30px/1.35 "Songti SC", "STSong", serif;
+  letter-spacing: 0.06em;
+}
+.archive-next p {
+  max-width: 34ch;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+.spoiler-toggle {
+  height: 40px;
+  padding: 0 15px;
+  border: 1px solid #846b94;
+  border-radius: 6px;
+  background: #231e35;
+  color: #dec1ed;
+  white-space: nowrap;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.spoiler-toggle:hover {
+  background: #342a49;
+}
+.spoiler-toggle:active {
+  transform: scale(0.97);
+}
+.spoiler-toggle[aria-pressed="true"] {
+  color: #14111f;
+  background: #d7b7ef;
+}
+.back3d {
+  background-size: 100% 100%;
+  background-position: center;
+}
+.back3d::before {
+  display: none;
+}
+@media (max-width: 900px) {
+  .archive {
+    margin: 70px 23px 80px;
+    padding: 28px 0 0;
+  }
+  .archive-heading {
+    display: block;
+  }
+  .archive-heading p {
+    margin-top: 16px;
+  }
+}
+@media (max-width: 760px) {
+  .archive-link {
+    display: none;
+  }
+}
