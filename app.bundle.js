@@ -31194,7 +31194,7 @@ void main() {
 `;
 var edgeFragment = common2 + `
 void main() {
-  vec3 col = mix(vec3(.66,.69,.67),film(vUv)*.6+.35,strength()*.7);
+  vec3 col = mix(vec3(.56,.49,.68),film(vUv)*.55+.3,strength()*.65);
   gl_FragColor=vec4(pow(col,vec3(2.2)),1.);
   #include <colorspace_fragment>
 }
@@ -31204,10 +31204,11 @@ uniform sampler2D tBack;
 void main() {
   vec2 uv=vec2(1.-vUv.x,vUv.y);
   vec4 art=texture2D(tBack,uv);
-  vec3 col=vec3(.956,.961,.946);
+  vec3 col=vec3(.06,.07,.13);
   col*=1.-strength()*.12*(1.-film(vUv));
   col+=film(vUv)*sweep(vUv)*strength()*.055;
   col=mix(col,art.rgb,art.a);
+  col+=film(vUv)*sweep(vUv)*strength()*.07;
   gl_FragColor=vec4(pow(clamp(col,0.,1.),vec3(2.2)),1.);
   #include <colorspace_fragment>
 }
@@ -31256,25 +31257,57 @@ function backTexture() {
   c.width = 1024;
   c.height = 1536;
   const ctx = c.getContext("2d");
-  ctx.strokeStyle = "#aeb5aa";
+  const field = ctx.createRadialGradient(512, 748, 70, 512, 748, 850);
+  field.addColorStop(0, "#4a2d67");
+  field.addColorStop(0.48, "#24203f");
+  field.addColorStop(1, "#0b1224");
+  ctx.fillStyle = field;
+  ctx.fillRect(0, 0, 1024, 1536);
+  ctx.strokeStyle = "rgba(222, 190, 240, 0.08)";
+  ctx.lineWidth = 1;
+  for (let x = 80; x < 1024; x += 64) {
+    ctx.beginPath(); ctx.moveTo(x, 80); ctx.lineTo(x, 1456); ctx.stroke();
+  }
+  for (let y = 80; y < 1536; y += 64) {
+    ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(944, y); ctx.stroke();
+  }
+  ctx.strokeStyle = "#c7abd9";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(38, 38, 948, 1460);
+  ctx.strokeStyle = "rgba(222, 190, 240, 0.58)";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(62, 62, 900, 1412);
   ctx.lineWidth = 1.5;
-  ctx.strokeRect(56, 56, 912, 1424);
-  ctx.strokeRect(72, 72, 880, 1392);
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#50594e";
-  ctx.font = "500 420px Atelier, Georgia, serif";
-  ctx.fillText((config.title || "A").slice(0, 1), 512, 846);
-  ctx.font = "24px Arial";
-  ctx.fillStyle = "#737b70";
-  ctx.fillText(config.collection || "WHITE ATELIER", 512, 245);
-  ctx.font = '34px "Songti SC", serif';
-  ctx.fillText(config.subtitle || config.title, 512, 1020);
-  ctx.font = "18px Arial";
-  ctx.fillText(config.edition || "ART STUDY", 512, 1337);
+  for (const radius of [294, 342]) {
+    ctx.beginPath(); ctx.arc(512, 755, radius, 0, Math.PI * 2); ctx.stroke();
+  }
   ctx.beginPath();
-  ctx.moveTo(460, 1113);
-  ctx.lineTo(564, 1113);
+  ctx.moveTo(512, 335); ctx.lineTo(512, 510);
+  ctx.moveTo(512, 1000); ctx.lineTo(512, 1175);
+  ctx.moveTo(90, 755); ctx.lineTo(218, 755);
+  ctx.moveTo(806, 755); ctx.lineTo(934, 755);
   ctx.stroke();
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#dfc6ee";
+  ctx.font = "22px Arial";
+  ctx.letterSpacing = "8px";
+  ctx.fillText("NEON ARCHIVE", 512, 195);
+  ctx.font = "600 328px Atelier, Georgia, serif";
+  ctx.letterSpacing = "-24px";
+  ctx.shadowColor = "#e495f7";
+  ctx.shadowBlur = 45;
+  ctx.fillText("NW", 493, 870);
+  ctx.shadowBlur = 0;
+  ctx.letterSpacing = "6px";
+  ctx.font = "26px Arial";
+  ctx.fillText("SSR  /  SILVER FOIL", 512, 1050);
+  ctx.font = "37px Atelier, Georgia, serif";
+  ctx.letterSpacing = "5px";
+  ctx.fillText(config.title || "NEON WRAITH", 512, 1298);
+  ctx.font = "21px Arial";
+  ctx.letterSpacing = "7px";
+  ctx.fillStyle = "#b7a6cf";
+  ctx.fillText(config.edition || "No.001", 512, 1363);
   return canvasTexture(c);
 }
 function addShadow() {
@@ -31329,7 +31362,7 @@ async function init() {
   const response = await fetch("./card-config.json");
   if (!response.ok) throw Error("\u4F5C\u54C1\u914D\u7F6E\u672A\u627E\u5230");
   config = await response.json();
-  document.title = config.title + " \xB7 \u767D\u76F8";
+  document.title = config.title + " \xB7 NEON ARCHIVE";
   for (const [id, key] of [
     ["card-title", "title"],
     ["subtitle", "subtitle"],
@@ -31362,7 +31395,7 @@ async function init() {
       return;
     }
   }
-  renderer.setClearColor(config.appearance?.background || "#fafafa", 1);
+  renderer.setClearColor("#0b0e1b", 1);
   renderer.setPixelRatio(Math.min(devicePixelRatio, matchMedia("(max-width: 720px)").matches ? 1.5 : 2));
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = NoToneMapping;
@@ -31538,7 +31571,7 @@ function fallback3D(error) {
   back.className = "face3d back3d";
   const backMark = document.createElement("span");
   backMark.className = "back-mark";
-  backMark.textContent = "\u767D\u76F8";
+  backMark.textContent = "NW";
   back.append(backMark);
   card.append(front, back);
   flipper.append(card);
@@ -31654,7 +31687,7 @@ function resize() {
   if (!renderer) return;
   const width = stage.clientWidth, height = stage.clientHeight;
   const aspect2 = width / height;
-  const halfHeight = Math.max(config.sourceMode === "relief" ? 6.25 : 5.45, 4.5 / aspect2) / zoom;
+  const halfHeight = Math.max(config.sourceMode === "relief" ? 6.25 : 4.8, 4 / aspect2) / zoom;
   camera.left = -halfHeight * aspect2;
   camera.right = halfHeight * aspect2;
   camera.top = halfHeight;

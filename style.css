@@ -891,3 +891,327 @@ dialog dd {
     scroll-behavior: auto !important;
   }
 }
+
+/* Edition 02: a low-light display case for the existing layered card artwork. */
+:root {
+  color-scheme: dark;
+  --paper: #080b16;
+  --ink: #f5f1fb;
+  --muted: #a3a6bc;
+  --line: #303249;
+  --accent: #d5aaf6;
+  --focus: #d5aaf6;
+  --control: #171b2d;
+}
+body {
+  min-height: 100svh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(ellipse 42% 48% at 50% 43%, #45225b61, transparent 80%),
+    radial-gradient(ellipse 38% 34% at 73% 5%, #191b3b74, transparent 80%),
+    #080b16;
+}
+body::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#a385cf0d 1px, transparent 1px),
+    linear-gradient(90deg, #a385cf0d 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(transparent, #000 20%, #000 75%, transparent);
+}
+main,
+.masthead,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+.masthead {
+  max-width: 1600px;
+  height: 84px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--line);
+}
+.wordmark-cn {
+  font-family: Atelier, Georgia, serif;
+  font-size: 34px;
+  letter-spacing: -0.12em;
+}
+.wordmark-en {
+  max-width: none;
+  letter-spacing: 0.19em;
+  line-height: 1.45;
+  color: #d0c4db;
+}
+.brand-dot {
+  width: 4px;
+  height: 4px;
+  margin-left: 9px;
+}
+.collection-label {
+  letter-spacing: 0.18em;
+}
+.collection-label > span:first-child {
+  color: #d1bddc;
+}
+.icon-button:hover:not(:disabled),
+.icon-button[aria-pressed="true"] {
+  background: #29243e;
+}
+.save-button {
+  background: #d7b7ef;
+  color: #14111f;
+}
+.save-button:hover:not(:disabled) {
+  background: #ebd5f7;
+  color: #14111f;
+}
+.gallery {
+  max-width: 1600px;
+  height: min(75svh, 780px);
+  min-height: 540px;
+  margin: 0 auto;
+  isolation: isolate;
+}
+.gallery::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: min(69vw, 860px);
+  height: 90%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(ellipse, #a03d9b2b 0, #66368a1c 42%, transparent 72%);
+  filter: blur(20px);
+}
+.gallery-copy,
+.gallery-serial {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+.gallery-copy {
+  top: 25%;
+  left: clamp(42px, 5.2vw, 90px);
+  max-width: 235px;
+}
+.gallery-index {
+  display: block;
+  color: #c9a8df;
+  font-size: 10px;
+  letter-spacing: 0.23em;
+  margin-bottom: 27px;
+}
+.gallery-copy strong {
+  display: block;
+  font: 400 clamp(29px, 3vw, 42px)/1.25 "Songti SC", "STSong", serif;
+  letter-spacing: 0.08em;
+}
+.gallery-copy p {
+  max-width: 190px;
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+  letter-spacing: 0.06em;
+}
+.gallery-serial {
+  top: 40%;
+  right: clamp(42px, 5.2vw, 90px);
+  color: #b6a8cf;
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+}
+.gallery-serial span {
+  color: #dd88d7;
+}
+.stage {
+  inset: 7px 0 53px;
+}
+.static-poster {
+  filter: drop-shadow(0 28px 48px #0009) drop-shadow(0 0 60px #a6429e40);
+}
+.stage-note {
+  inset: auto 54px 28px;
+  color: #a8a2bb;
+  letter-spacing: 0.16em;
+}
+.tools {
+  background: #111524ed;
+  border: 1px solid #3f3b55;
+  border-radius: 100px;
+  padding: 0 8px;
+  box-shadow: 0 16px 45px #0008;
+}
+.parameter-panel {
+  background: #14182aef;
+  border: 1px solid #45435f;
+  box-shadow: 0 20px 55px #0009;
+  backdrop-filter: blur(18px);
+}
+.artwork-bar {
+  max-width: 1492px;
+  margin: 0 auto;
+  padding: 28px 54px 9px;
+  min-height: 122px;
+}
+.title-line h1 {
+  font-size: 42px;
+  letter-spacing: 0.015em;
+}
+.title-line > span {
+  color: #d2aadf;
+}
+.artwork-title p {
+  color: #a9a5b8;
+}
+.face-picker {
+  background: #171b2c;
+  border: 1px solid #3b3d54;
+  border-radius: 5px;
+}
+.face-picker button[aria-pressed="true"] {
+  background: #d3b1e9;
+  color: #17131e;
+  box-shadow: 0 3px 12px #0006;
+}
+.depth-toggle[aria-expanded="true"] {
+  background: #2d2a40;
+  color: var(--ink);
+  border-color: #77708c;
+}
+.swatch {
+  box-shadow: inset 0 0 0 1px #ffffff36;
+}
+.footer {
+  max-width: 1492px;
+  height: 74px;
+  margin: 0 auto;
+  padding: 0 54px;
+  border-top: 1px solid #292c41;
+  letter-spacing: 0.08em;
+}
+.notice,
+dialog {
+  background: #1a1e31;
+  border: 1px solid #55516c;
+  color: var(--ink);
+}
+dialog::backdrop {
+  background: #050712bd;
+}
+.back3d {
+  background:
+    radial-gradient(circle at 50% 50%, #543463 0, #261d41 36%, #0d1325 75%),
+    #0d1325;
+  border: 2px solid #b799cb;
+}
+.back3d::before {
+  inset: 6%;
+  border: 1px solid #beabd496;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 27%, #b993d333 27.3%, transparent 28%),
+    repeating-linear-gradient(115deg, #ffbfff0d 0 2px, transparent 2px 15px);
+}
+.back-mark {
+  font-family: Atelier, Georgia, serif;
+  font-size: clamp(80px, 12vw, 160px);
+  letter-spacing: -0.14em;
+  color: #e4c9f4;
+  text-shadow: 0 0 34px #c981e579;
+}
+@media (max-width: 1050px) {
+  .gallery-copy,
+  .gallery-serial {
+    display: none;
+  }
+}
+@media (max-width: 960px) {
+  .parameter-panel {
+    background: #14182a;
+    border: 1px solid #45435f;
+  }
+}
+@media (max-width: 760px) {
+  .masthead {
+    height: 72px;
+    padding: 0 23px;
+  }
+  .wordmark-cn {
+    font-size: 29px;
+  }
+  .wordmark-en {
+    font-size: 9px;
+  }
+  .gallery {
+    height: min(67svh, 640px);
+    min-height: 470px;
+  }
+  .stage {
+    inset: 0 0 48px;
+  }
+  .artwork-bar {
+    margin: 0 23px;
+    padding: 25px 0 16px;
+    grid-template-columns: 1fr;
+    gap: 19px;
+  }
+  .title-line {
+    display: block;
+  }
+  .title-line h1 {
+    max-width: none;
+    font-size: clamp(29px, 8vw, 35px);
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+  .title-line > span {
+    display: block;
+    margin-top: 13px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .face-picker {
+    justify-self: start;
+  }
+  .finish-cluster {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: stretch;
+    align-items: start;
+    gap: 18px;
+  }
+  .finish-control {
+    gap: 13px;
+  }
+  .footer {
+    height: 70px;
+    margin: 0 23px;
+    padding: 0;
+  }
+  .parameter-panel {
+    width: calc(100% - 46px);
+    margin: 22px auto 0;
+  }
+}
+@media (max-width: 390px) {
+  .gallery {
+    height: min(63svh, 550px);
+    min-height: 425px;
+  }
+  .wordmark {
+    gap: 12px;
+  }
+  .wordmark-en {
+    letter-spacing: 0.08em;
+  }
+  .title-line h1 {
+    font-size: 29px;
+  }
+}

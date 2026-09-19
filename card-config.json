@@ -6,6 +6,7 @@
   "edition": "No.001",
   "collection": "ORIGINAL CYBERPUNK SERIES",
   "description": "An original cyberpunk heroine in violet neon.",
+  "appearance": { "finish": "silver" },
   "assets": {
     "subject": "./assets/subject.webp",
     "background": "./assets/background.webp",

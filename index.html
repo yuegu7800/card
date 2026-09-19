@@ -3,19 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#fafafa" />
-    <link rel="icon" href="data:," />
-    <title>白相 · White Atelier</title>
-    <link rel="stylesheet" href="./style.css?v=mobile-2" />
+    <meta name="theme-color" content="#080b16" />
+    <meta name="description" content="NEON WRAITH — 可旋转的 SSR 银箔全息收藏卡。拖动卡片，看光泽随视角流动。" />
+    <meta property="og:title" content="NEON WRAITH · 全息收藏卡" />
+    <meta property="og:description" content="拖动、翻面，近距离欣赏 No.001 银箔镭射收藏卡。" />
+    <meta property="og:image" content="https://yuegu7800.github.io/card/assets/preview.webp" />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <title>NEON WRAITH · 全息收藏卡</title>
+    <link rel="stylesheet" href="./style.css?v=edition-2" />
   </head>
   <body>
     <header class="masthead">
-      <a class="wordmark" href="./" aria-label="白相首页"
-        ><span class="wordmark-cn">白相<span class="brand-dot"></span></span
-        ><span class="wordmark-en">WHITE ATELIER</span></a
+      <a class="wordmark" href="./" aria-label="NEON WRAITH 首页"
+        ><span class="wordmark-cn">NW<span class="brand-dot"></span></span
+        ><span class="wordmark-en">NEON<br />ARCHIVE</span></a
       >
       <span class="collection-label"
-        >个人典藏 <span>/</span> <span id="edition">STUDY 001</span></span
+        >INTERACTIVE COLLECTIBLE <span>/</span> <span id="edition">No.001</span></span
       >
       <div class="header-actions">
         <button
@@ -40,6 +44,12 @@
     </header>
     <main>
       <section class="gallery" aria-label="卡片展台">
+        <div class="gallery-copy" aria-hidden="true">
+          <span class="gallery-index">COLLECTIBLE / 001</span>
+          <strong>光随视角<br />流动。</strong>
+          <p>拖动卡片，感受银箔与人物景深。</p>
+        </div>
+        <div class="gallery-serial" aria-hidden="true">SSR <span>—</span> SILVER FOIL</div>
         <div
           class="stage"
           id="stage"
@@ -49,7 +59,7 @@
         >
           <img
             class="static-poster"
-            src="./assets/preview.webp?v=mobile-2"
+            src="./assets/preview.webp?v=edition-2"
             alt="NEON WRAITH 卡面预览"
           />
           <div id="loading" class="loading" role="status">
@@ -57,9 +67,9 @@
           </div>
         </div>
         <div class="stage-note" aria-hidden="true">
-          <span>ART STUDY</span><span id="view-label">01 / FRONT</span>
+          <span>DRAG TO DISCOVER</span><span id="view-label">01 / FRONT</span>
         </div>
-        <div class="parameter-panel" id="parameter-panel">
+        <div class="parameter-panel" id="parameter-panel" hidden>
           <div class="panel-heading">
             <span>景深与构图</span>
           </div>
@@ -87,7 +97,7 @@
             <h1 id="card-title">BOND</h1>
             <span id="subtitle">共生</span>
           </div>
-          <p id="description">光与影，彼此相依。</p>
+          <p id="description">紫色霓虹中的原创赛博朋克角色。</p>
         </div>
         <div class="face-picker" role="group" aria-label="卡片朝向">
           <button id="front" aria-pressed="true" disabled>正面</button
@@ -99,7 +109,7 @@
             class="depth-toggle"
             type="button"
             aria-controls="parameter-panel"
-            aria-expanded="true"
+            aria-expanded="false"
             aria-label="显示或隐藏景深调整"
             title="显示或隐藏景深调整"
           >
@@ -112,7 +122,7 @@
               <button
                 class="swatch pearl"
                 data-finish="pearl"
-                aria-pressed="true"
+                aria-pressed="false"
                 aria-label="珠光"
                 title="珠光"
                 disabled
@@ -120,7 +130,7 @@
               ><button
                 class="swatch silver"
                 data-finish="silver"
-                aria-pressed="false"
+                aria-pressed="true"
                 aria-label="银箔"
                 title="银箔"
                 disabled
@@ -142,7 +152,7 @@
                 disabled
               ></button>
             </div>
-            <span id="finish-name">烫金</span>
+            <span id="finish-name">银箔</span>
           </div>
           <label class="foil-row" for="foil"
             ><span>光泽</span
@@ -161,7 +171,7 @@
       </section>
     </main>
     <footer class="footer">
-      <span>光影之间，自有回响。</span><span>PERSONAL ART COLLECTION</span>
+      <span>转动视角，光泽会变。</span><span>NEON ARCHIVE / No.001</span>
     </footer>
     <dialog id="about" aria-labelledby="about-title">
       <button
@@ -172,17 +182,17 @@
       >
         <i data-lucide="x"></i>
       </button>
-      <p class="dialog-mark">白相</p>
+      <p class="dialog-mark">NW / 001</p>
       <h2 id="about-title">共生 / BOND</h2>
       <p id="about-description"></p>
       <dl>
         <div>
           <dt>来源</dt>
-          <dd>用户提供的参考作品</dd>
+          <dd>原创赛博朋克角色</dd>
         </div>
         <div>
           <dt>呈现</dt>
-          <dd>个人艺术卡片习作</dd>
+          <dd>可交互 3D 全息收藏卡</dd>
         </div>
         <div>
           <dt>编号</dt>
@@ -191,6 +201,6 @@
       </dl>
     </dialog>
     <div id="notice" role="status" class="notice" hidden></div>
-    <script type="module" src="./app.bundle.js?v=mobile-2"></script>
+    <script type="module" src="./app.bundle.js?v=edition-2"></script>
   </body>
 </html>
